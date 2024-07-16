@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poll Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif
+        }
+
+        body {
+            background: linear-gradient(to right,grey 50%,rgb(183, 16, 166));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .container {
+            background-color: rgb(201, 202, 201);
+            height: 400px;
+            width: 400px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.8);
+
+        }
+
+        @keyframes cardanimation {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            margin-top: 20px;
+            color: rgb(183, 16, 166);
+            opacity: 1;
+            font-size: 32px;
+        }
+
+        .poll {
+            margin-top: 10px;
+        }
+
+        h2 {
+            color: rgb(183, 16, 166);
+            font-size: 24px;
+
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+        }
+
+        .option {
+            margin-top: 10px;
+            color: black;
+        }
+
+        input[type="radio"] {
+            display: none;
+
+        }
+
+        label {
+            display: inline-block;
+            padding: 05px 05px;
+            background-color: #f3f3f3;
+            border-radius: 10px;
+            transition: background-color 3s;
+        }
+
+        label:hover {
+            background-color: rgb(183, 16, 166);
+            color: white;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 6px 5px;
+            background-color: rgb(183, 16, 166);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            transition: background-color 2s;
+        }
+
+        button:hover {
+            background-color: red;
+            color: white;
+        }
+
+        #result {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgb(183, 16, 166);
+        }
+
+        .option-result {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .option-text {
+            flex: 1;
+
+        }
+
+        .bar-container {
+            flex: 3;
+            background-color: white;
+            height: 10px;
+            margin-left: 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+
+        .bar {
+
+            height: 100%;
+            background-color: rgb(183, 16, 166);
+            width: 0;
+            transition: width 0.5s ease-in-out;
+            border-radius: 5px;
+        }
+
+        .percentage {
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Polling Application</h1>
+        <div class="poll">
+            <h2>What is Your Fvrte language</h2>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" name="poll" value="option1" id="option1">
+                    <label for="option1">Javascript</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="poll" value="option2" id="option2">
+                    <label for="option2">Java</label>
+                </div>
+
+                <div class="option">
+                    <input type="radio" name="poll" value="option3" id="option3">
+                    <label for="option3">Python</label>
+                </div>
+
+                <div class="option">
+                    <input type="radio" name="poll" value="option4" id="option4">
+                    <label for="option4">C++</label>
+                </div>
+
+            </div>
+            <button onclick="submitVote()">Submit </button>
+            <div id="result"></div>
+        </div>
+
+    </div>
+    <script>
+        let btn = document.getElementById('btn');
+const options = [
+    { id: "option1", text: "Javascript", votes: 0 },
+    { id: "option2", text: "Java", votes: 0 },
+    { id: "option3", text: "Python", votes: 0 },
+    { id: "option4", text: "C++", votes: 0 }
+];
+function submitVote() {
+    const selectedOption = document.querySelector('input[name="poll"]:checked');
+
+    if (!selectedOption) {
+        alert("please select an option");
+    }
+    const optionid = selectedOption.value;
+    const selopid = options.find((option) => option.id == optionid);
+    console.log(selopid)
+    if (selopid) {
+        selopid.votes++;
+        console.log(selopid);
+        displayres();
+    }
+};
+function displayres() {
+    const result = document.getElementById('result');
+    result.innerHTML = "";
+   console.log(options.votes)
+    options.forEach((option)=>{
+        const percentage = ((option.votes/totalvotes()) * 100).toFixed(2) || 0;
+        const barWidth = percentage > 0 ? percentage + "%" : "0%";
+        
+        const optionResult = document.createElement("div");
+        optionResult.className = "option-result";
+        optionResult.innerHTML = `
+            <span class = "option-text">${option.text}</span>
+            <div class = "bar-container">
+                <div class = "bar" style="width: ${barWidth};"></div>
+            </div>
+            <span class = "percentage">${percentage}%</span>
+        `;
+        
+        result.appendChild(optionResult);
+    
+
+    });
+}
+
+
+function totalvotes() {
+    return options.reduce((total, option) => total + option.votes, 0);
+}
+displayres();
+
+    </script>
+</body>
+
+</html>
